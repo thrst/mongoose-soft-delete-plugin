@@ -13,4 +13,5 @@
   ModelSchema.plugin(softDeletePlugin);
 
   module.exports = mongoose.model('Model', ModelSchema);
+
 })();
