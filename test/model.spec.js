@@ -19,9 +19,9 @@
 
     it('should add deletedAt property to model', function() {
       return Model.find(minimumModel)
-        .then(doc => {
-          expect(doc.deletedAt).to.be.ok;
-          expect(doc.deletedAt).to.be.a.Date;
+        .then(docs => {
+          expect(docs[0].deletedAt).to.be.ok;
+          expect(docs[0].deletedAt).to.be.a.Date;
         });
     });
 
