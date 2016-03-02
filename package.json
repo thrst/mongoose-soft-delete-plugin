@@ -1,0 +1,19 @@
+{
+  "name": "mongoose-soft-delete-plugin",
+  "version": "1.0.0",
+  "description": "Adds deletedAt field and automatically handles soft deletion",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thrst/mongoose-soft-delete-plugin.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thrst/mongoose-soft-delete-plugin/issues"
+  },
+  "homepage": "https://github.com/thrst/mongoose-soft-delete-plugin#readme"
+}
