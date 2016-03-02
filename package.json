@@ -4,7 +4,7 @@
   "description": "Adds deletedAt field and automatically handles soft deletion",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/thrst/mongoose-soft-delete-plugin/issues"
   },
-  "homepage": "https://github.com/thrst/mongoose-soft-delete-plugin#readme"
+  "homepage": "https://github.com/thrst/mongoose-soft-delete-plugin#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "mongoose": "^4.4.5"
+  }
 }
