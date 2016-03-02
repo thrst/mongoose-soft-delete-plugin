@@ -1,4 +1,4 @@
-(function IIFE(){
+(function IIFE() {
   'use strict';
 
   const expect = require('chai').expect;
@@ -61,7 +61,9 @@
         return Model.create(minimumModel)
           .then(() => Model.find(minimumModel))
           .then(docs => Model.softDeleteById(docs[0]._id))
-          .then(() => Model.count(_.merge({ deleted: true }, minimumModel)))
+          .then(() => Model.count(_.merge({
+            deleted: true
+          }, minimumModel)))
           .then(count => {
             expect(count).to.equal(2);
           });
@@ -83,7 +85,9 @@
         return Model.create(minimumModel)
           .then(() => Model.find(minimumModel))
           .then(docs => Model.softDeleteById(docs[0]._id))
-          .then(() => Model.find(_.merge({ deleted: true }, minimumModel)))
+          .then(() => Model.find(_.merge({
+            deleted: true
+          }, minimumModel)))
           .then(docs => {
             expect(docs.length).to.equal(2);
           });
@@ -104,7 +108,9 @@
       it('should find deleted document when passing deleted:true', function() {
         return Model.find(minimumModel)
           .then(docs => Model.softDeleteById(docs[0]._id))
-          .then(() => Model.findOne(_.merge({ deleted: true }, minimumModel)))
+          .then(() => Model.findOne(_.merge({
+            deleted: true
+          }, minimumModel)))
           .then(doc => {
             expect(doc.deletedAt).to.be.a.Date;
           });
@@ -127,7 +133,11 @@
         return Model.create(minimumModel)
           .then(() => Model.find(minimumModel))
           .then(docs => Model.softDeleteById(docs[0]._id))
-          .then(() => Model.findOneAndUpdate(minimumModel, { name: 'newModel' }, { new: true }))
+          .then(() => Model.findOneAndUpdate(minimumModel, {
+            name: 'newModel'
+          }, {
+            new: true
+          }))
           .then(doc => {
             expect(doc.deletedAt).to.equal(null);
             expect(doc.name).to.equal('newModel');
@@ -137,7 +147,13 @@
       it('should find deleted document when passing deleted:true', function() {
         return Model.find(minimumModel)
           .then(docs => Model.softDeleteById(docs[0]._id))
-          .then(() => Model.findOneAndUpdate(_.merge({ deleted: true }, minimumModel), { name: 'newModel' }, { new: true }))
+          .then(() => Model.findOneAndUpdate(_.merge({
+            deleted: true
+          }, minimumModel), {
+            name: 'newModel'
+          }, {
+            new: true
+          }))
           .then(doc => {
             expect(doc.deletedAt).to.be.a.Date;
             expect(doc.name).to.equal('newModel');
