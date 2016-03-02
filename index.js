@@ -1,35 +1,74 @@
 (function IIFE(){
   'use strict';
 
-  function softDelete(schema) {
-    schema.add({
-      deletedAt: {
-        type: Date,
-        default: null
-      }
-    });
+  const deletedAtAttribute = {
+    deletedAt: {
+      type: Date,
+      default: null
+    }
+  };
 
-    schema.methods.softDelete = function *() {
-      if(this.deletedAt === null) {
-        this.deletedAt = new Date();
-        yield this.save();
-      }
+  function softDeletePlugin(schema) {
+    // Add deletedAt attribute
+    schema.add(deletedAtAttribute);
+
+    // Pre hooks to exclude finding deleted documents
+    function addDeletedAtCondition(method) {
+      return function(next) {
+        if(this.op === method && !this._conditions.deleted) {
+          this._conditions.deletedAt = null;
+        }
+
+        delete this._conditions.deleted;
+
+        next();
+      };
+    }
+
+    schema.pre('count', addDeletedAtCondition('count'));
+    schema.pre('find', addDeletedAtCondition('find'));
+    schema.pre('findOne', addDeletedAtCondition('findOne'));
+    schema.pre('findOneAndUpdate', addDeletedAtCondition('findOneAndUpdate'));
+
+    // Soft delete methods
+    schema.statics.softDeleteById = function(id, cb) {
+      const schema = this;
+
+      const conditions = {
+        _id: id
+      };
+
+      const update = {
+        deletedAt: new Date()
+      };
+
+      const options = {
+        new: true
+      };
+
+      return schema.findOneAndUpdate(conditions, update, options, cb);
     };
 
+    schema.methods.softDelete = function(cb) {
+      return this.constructor.softDeleteById(this._id, cb);
+    };
+
+
+    // Exclude deletedAt from being included in json if null
     if(!schema.options.toJSON) {
       schema.options.toJSON = {};
     }
 
-    const previousTransformation = schema.options.toJSON.transform || function() {};
+    const previousJSONTransformation = schema.options.toJSON.transform || function() {};
 
     schema.options.toJSON.transform = function(doc, ret, opts) {
       if(ret.deletedAt === null) {
         delete ret.deletedAt;
       }
 
-      return previousTransformation(doc, ret, opts);
+      return previousJSONTransformation(doc, ret, opts);
     };
   }
 
-  module.exports = softDelete;
+  module.exports = softDeletePlugin;
 })();
